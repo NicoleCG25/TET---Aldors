@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 
 const DATA = [
@@ -28,6 +29,7 @@ const DATA = [
     id: '4',
     title: 'Quarto Item',
     description: 'Sobre o item ...',
+
   },
 ];
 
@@ -36,6 +38,9 @@ const Item = ({title, description, id}) => (
     <Text style={styles.id}>{id}</Text>
     <Text style={styles.title}>{title}</Text>
     <Text style={styles.description}>{description}</Text>
+    <TouchableOpacity>
+        <Text>Selecionar</Text>
+      </TouchableOpacity>
   </View>
 );
 
@@ -57,7 +62,7 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#C47EEB',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
