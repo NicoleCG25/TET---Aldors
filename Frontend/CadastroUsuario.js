@@ -36,7 +36,6 @@ const CadastroUsuario = ({ navigation }) => {
 
   return (
     <SafeAreaView>
-      <p style={styles.title}> Cadastro </p>
 
       <TextInput
         style={styles.input}

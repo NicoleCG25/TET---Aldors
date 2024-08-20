@@ -39,7 +39,6 @@ const Login = ({ navigation }) => {
 
   return (
     <SafeAreaView>
-      <p style={styles.title}> Login </p>
 
       <TextInput
         style={styles.input}
