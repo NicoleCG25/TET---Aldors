@@ -6,13 +6,17 @@ const CadastroUsuario = ({ navigation }) => {
   const [text, onChangeText] = React.useState('');
   const [number, onChangeNumber] = React.useState('');
   const [nome, setNome] = React.useState(''); //Do tipo useState, usada para modificar variaveis. Pegar o que foi digitado pelo usuario
+  const [estado, setEstado] = React.useState('');
+  const [cidade, setCidade] = React.useState('');
+  const [bairro, setBairro] = React.useState('');
+  const [DataNasc, setDastaNasc] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [senha, setSenha] = React.useState('');
   const [mensagem, setMensagem] = useState('');
 
   const Cadastrar = () => {
     console.log('teste');
-    var userObj = { nome: nome, email: email, senha: senha }; //1° atributo, 2° valor
+    var userObj = { nome: nome, estado: estado, cidade: cidade, bairro: bairro, DataNasc, email: email, senha: senha }; //1° atributo, 2° valor
     var jsonBody = JSON.stringify(userObj);
     console.log(jsonBody); //Para ver se está construido corretamente
     fetch('https://tet-nicole.glitch.me/usuarios', {
@@ -41,6 +45,30 @@ const CadastroUsuario = ({ navigation }) => {
         style={styles.input}
         placeholder="Nome de Usuário"
         onChangeText={(event) => setNome(event)} //Sempre que o texto for modificado será acionado o event, será enviado o valor digitado
+      />
+
+      <TextInput
+        style={styles.input}
+        onChangeText={(event) => setEmail(event)}
+        placeholder="Estado"
+      />
+
+      <TextInput
+        style={styles.input}
+        onChangeText={(event) => setEmail(event)}
+        placeholder="Cidade"
+      />
+
+      <TextInput
+        style={styles.input}
+        onChangeText={(event) => setEmail(event)}
+        placeholder="Bairro"
+      />
+
+      <TextInput
+        style={styles.input}
+        onChangeText={(event) => setEmail(event)}
+        placeholder="Data de Nascimento"
       />
 
       <TextInput
