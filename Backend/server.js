@@ -59,8 +59,8 @@ app.get("/usuarios/:id", (req, res) => {
 });
 
 app.post("/usuarios", (req, res) => {
-  const id = [req.body.nome, req.body.email, req.body.senha];
-  execSQLQuery("INSERT INTO usuario VALUES (null, ?, ?, ?)", id, res);
+  const id = [req.body.nome, req.body.estado, req.body.cidade, req.body.bairro, req.body.DataNasc, req.body.email, req.body.senha];
+  execSQLQuery("INSERT INTO usuario VALUES (null, ?, ?, ?, ?, ?, ?, ?)", id, res);
 });
 
 app.post("/login", async (req, res) => {
@@ -75,9 +75,9 @@ app.post("/login", async (req, res) => {
 });
 
 app.put("/usuarios/:id", (req, res) => {
-  const id = [req.body.nome, req.body.email, req.body.senha, req.params.id];
+  const id = [req.body.nome, req.body.estado, req.body.cidade, req.body.bairro, req.body.DataNasc, req.body.email, req.body.senha, req.params.id];
   execSQLQuery(
-    "UPDATE usuario SET usu_nome = ?, usu_email = ?, usu_senha = ? WHERE usu_id = ?",
+    "UPDATE usuario SET usu_nome = ?, usu_estado = ?, usu_cidade = ?, usu_bairro = ?, usu_DataNasc = ?, usu_email = ?, usu_senha = ? WHERE usu_id = ?",
     id,
     res
   );
