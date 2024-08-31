@@ -2,25 +2,18 @@ import React, { useState } from 'react';
 import { SafeAreaView, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const CadastroUsuario = ({ navigation }) => {
-  const [nome, setNome] = useState('');
-  const [estado, setEstado] = useState('');
-  const [cidade, setCidade] = useState('');
-  const [bairro, setBairro] = useState('');
-  const [dataNasc, setDataNasc] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [text, onChangeText] = React.useState('');
+  const [number, onChangeNumber] = React.useState('');
+  const [nome, setNome] = React.useState(''); //Do tipo useState, usada para modificar variaveis. Pegar o que foi digitado pelo usuario
+  const [email, setEmail] = React.useState('');
+  const [senha, setSenha] = React.useState('');
+  const [mensagem, setMensagem] = useState('');
 
   const Cadastrar = () => {
-    // Verificar se todos os campos estão preenchidos
-    if (!nome || !estado || !cidade || !bairro || !dataNasc || !email || !senha) {
-      return;
-    }
-
-    // Criar o objeto de usuário e convertê-lo para JSON
-    const userObj = { nome, estado, cidade, bairro, dataNasc, email, senha };
-    const jsonBody = JSON.stringify(userObj);
-    console.log(jsonBody);
-
+    console.log('teste');
+    var userObj = { nome: nome, email: email, senha: senha }; //1° atributo, 2° valor
+    var jsonBody = JSON.stringify(userObj);
+    console.log(jsonBody); //Para ver se está construido corretamente
     fetch('https://tet-nicole.glitch.me/usuarios', {
       method: 'POST',
       headers: {
@@ -69,6 +62,7 @@ const CadastroUsuario = ({ navigation }) => {
         placeholder="Data de Nascimento"
         onChangeText={setDataNasc}
       />
+
       <TextInput
         style={styles.input}
         placeholder="E-mail"

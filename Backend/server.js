@@ -56,13 +56,8 @@ app.get("/usuarios/:id", (req, res) => {
 
 // Rota para criar um novo usuário
 app.post("/usuarios", (req, res) => {
-  const { nome, estado, cidade, bairro, dataNasc, email, senha } = req.body;
-  const sql = `
-    INSERT INTO Usuário (Nome, Estado, Cidade, Bairro, DataNasc, Email, Senha) 
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `;
-  const values = [nome, estado, cidade, bairro, dataNasc, email, senha];
-  execSQLQuery(sql, values, res);
+  const id = [req.body.nome, req.body.email, req.body.senha];
+  execSQLQuery("INSERT INTO usuario VALUES (null, ?, ?, ?)", id, res);
 });
 
 // Rota para login de usuário
@@ -78,10 +73,9 @@ app.post("/login", async (req, res) => {
 
 // Rota para atualizar um usuário existente
 app.put("/usuarios/:id", (req, res) => {
-  const { nome, estado, cidade, bairro, dataNasc, email, senha } = req.body;
-  const id = [nome, estado, cidade, bairro, dataNasc, email, senha, req.params.id];
+  const id = [req.body.nome, req.body.email, req.body.senha, req.params.id];
   execSQLQuery(
-    "UPDATE Usuário SET Nome = ?, Estado = ?, Cidade = ?, Bairro = ?, DataNasc = ?, Email = ?, Senha = ? WHERE Id = ?",
+    "UPDATE usuario SET usu_nome = ?, usu_email = ?, usu_senha = ? WHERE usu_id = ?",
     id,
     res
   );
