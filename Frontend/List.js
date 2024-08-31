@@ -33,14 +33,14 @@ const DATA = [
   },
 ];
 
-const Item = ({title, description, id}) => (
+const Item = ({ title, description, id }) => (
   <View style={styles.item}>
     <Text style={styles.id}>{id}</Text>
     <Text style={styles.title}>{title}</Text>
     <Text style={styles.description}>{description}</Text>
     <TouchableOpacity>
-        <Text>Selecionar</Text>
-      </TouchableOpacity>
+      <Text>Selecionar</Text>
+    </TouchableOpacity>
   </View>
 );
 
@@ -49,7 +49,7 @@ const List = () => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({item}) => <Item id={item.id} title={item.title} description={item.description} />}
+        renderItem={({ item }) => <Item id={item.id} title={item.title} description={item.description} />}
         keyExtractor={item => item.id}
       />
     </SafeAreaView>

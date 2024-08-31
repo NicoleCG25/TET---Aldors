@@ -1,93 +1,99 @@
-//npm install express
-//npm install mysql2@3.2.0
-//npm install cors
-
+// Importar módulos necessários
 const express = require("express");
 const mysql = require("mysql2");
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
-var cors = require('cors');
-app.use(express.static("public"))
+// Configurar middleware
+app.use(express.static("public"));
 app.use(cors());
-
 app.use(express.json());
 
+// Configurações do banco de dados
 const db = {
   host: '54.173.126.116',
   port: 3306,
-  user: "00000000000",
-  password: "00000000000",
-  database: "00000000000",
+  user: "tet-aldors",
+  password: "aldors2024",
+  database: "tet-aldors",
 };
 
-const execSQLQuery = (sqlQry, id, res) => {
+// Função para executar queries SQL
+const execSQLQuery = (sqlQry, params, res) => {
   const connection = mysql.createConnection(db);
-  connection.query(sqlQry, id, (error, results, fields) => {
+  connection.query(sqlQry, params, (error, results, fields) => {
     if (error) res.json(error);
     else res.json(results);
-
     connection.end();
     console.log("Executou: execSQLQuery");
   });
 };
 
-async function resultSQLQuery(sqlQry, id) {
+// Função assíncrona para executar queries SQL
+async function resultSQLQuery(sqlQry, params) {
   const connection = await mysql.createConnection(db);
-
-  let [result] = await connection.promise().query(sqlQry, id);
-  try {
-    return result;
-  } catch (error) {
-    console.log("Erro: " + error);
-    throw error;
-  }
+  let [result] = await connection.promise().query(sqlQry, params);
+  connection.end();
+  return result;
 }
 
+// Rota para a página inicial
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+// Rota para obter todos os usuários
 app.get("/usuarios", (req, res) => {
-  const id = [];
-  execSQLQuery("SELECT * FROM usuario", id, res);
+  execSQLQuery("SELECT * FROM Usuário", [], res);
 });
 
+// Rota para obter um usuário específico por ID
 app.get("/usuarios/:id", (req, res) => {
   const id = [req.params.id];
-  execSQLQuery("SELECT * FROM usuario where usu_id=?", id, res);
+  execSQLQuery("SELECT * FROM Usuário WHERE Id=?", id, res);
 });
 
+// Rota para criar um novo usuário
 app.post("/usuarios", (req, res) => {
-  const id = [req.body.nome, req.body.email, req.body.senha];
-  execSQLQuery("INSERT INTO usuario VALUES (null, ?, ?, ?)", id, res);
+  const { nome, estado, cidade, bairro, dataNasc, email, senha } = req.body;
+  const sql = `
+    INSERT INTO Usuário (Nome, Estado, Cidade, Bairro, DataNasc, Email, Senha) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+  const values = [nome, estado, cidade, bairro, dataNasc, email, senha];
+  execSQLQuery(sql, values, res);
 });
 
+// Rota para login de usuário
 app.post("/login", async (req, res) => {
-  const id = [req.body.email, req.body.senha];
-  let [result] = await resultSQLQuery(
-    "SELECT * FROM usuario WHERE usu_email=? and usu_senha=?", id
+  const { email, senha } = req.body;
+  let result = await resultSQLQuery(
+    "SELECT * FROM Usuário WHERE Email=? AND Senha=?", [email, senha]
   );
-  console.log(result);
-  if (result)
-    res.json({ mensagem: "Sucesso!", id: result.usu_id });
-  else res.json({ mensagem: "'Email ou senha válido!" });
+  if (result.length > 0)
+    res.json({ mensagem: "Sucesso!", id: result[0].Id });
+  else res.json({ mensagem: "Email ou senha inválidos!" });
 });
 
+// Rota para atualizar um usuário existente
 app.put("/usuarios/:id", (req, res) => {
-  const id = [req.body.nome, req.body.email, req.body.senha, req.params.id];
+  const { nome, estado, cidade, bairro, dataNasc, email, senha } = req.body;
+  const id = [nome, estado, cidade, bairro, dataNasc, email, senha, req.params.id];
   execSQLQuery(
-    "UPDATE usuario SET usu_nome = ?, usu_email = ?, usu_senha = ? WHERE usu_id = ?",
+    "UPDATE Usuário SET Nome = ?, Estado = ?, Cidade = ?, Bairro = ?, DataNasc = ?, Email = ?, Senha = ? WHERE Id = ?",
     id,
     res
   );
 });
 
+// Rota para excluir um usuário
 app.delete("/usuarios/:id", (req, res) => {
   const id = [req.params.id];
-  execSQLQuery("DELETE FROM usuario WHERE usu_id=?", id, res);
+  execSQLQuery("DELETE FROM Usuário WHERE Id=?", id, res);
 });
 
+// Iniciar o servidor
 app.listen(port, () => {
   console.log(`App escutando a porta: ${port}`);
 });

@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
-import {SafeAreaView,StyleSheet,TextInput,Text,Button,} from 'react-native';
-import { TouchableOpacity, View } from 'react-native-gesture-handler';
+import { SafeAreaView, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const CadastroUsuario = ({ navigation }) => {
-  const [text, onChangeText] = React.useState('');
-  const [number, onChangeNumber] = React.useState('');
-  const [nome, setNome] = React.useState(''); //Do tipo useState, usada para modificar variaveis. Pegar o que foi digitado pelo usuario
-  const [email, setEmail] = React.useState('');
-  const [senha, setSenha] = React.useState('');
-  const [mensagem, setMensagem] = useState('');
+  const [nome, setNome] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [dataNasc, setDataNasc] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
   const Cadastrar = () => {
-    console.log('teste');
-    var userObj = { nome: nome, email: email, senha: senha }; //1° atributo, 2° valor
-    var jsonBody = JSON.stringify(userObj);
-    console.log(jsonBody); //Para ver se está construido corretamente
+    // Verificar se todos os campos estão preenchidos
+    if (!nome || !estado || !cidade || !bairro || !dataNasc || !email || !senha) {
+      return;
+    }
+
+    // Criar o objeto de usuário e convertê-lo para JSON
+    const userObj = { nome, estado, cidade, bairro, dataNasc, email, senha };
+    const jsonBody = JSON.stringify(userObj);
+    console.log(jsonBody);
+
     fetch('https://tet-nicole.glitch.me/usuarios', {
-      //Faz a requesição HTTP
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,48 +29,67 @@ const CadastroUsuario = ({ navigation }) => {
       },
       body: jsonBody,
     })
-      .then((response) => response.json())
+      .then(response => response.json())
       .then((json) => {
         console.log(json);
-        navigation.goBack(); //Voltar para a tela anterior (login)
+        navigation.goBack();  // Navegar de volta após o cadastro
       })
       .catch((err) => {
-        console.log(err); //Mostrar erro
+        console.log(err);
       });
   };
 
   return (
     <SafeAreaView>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Nome de Usuário"
-        onChangeText={(event) => setNome(event)} //Sempre que o texto for modificado será acionado o event, será enviado o valor digitado
-      />
+      <Text style={styles.title}>Fazer Cadastro</Text>
 
       <TextInput
         style={styles.input}
-        onChangeText={(event) => setEmail(event)}
+        placeholder="Nome"
+        onChangeText={setNome}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Estado"
+        onChangeText={setEstado}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Cidade"
+        onChangeText={setCidade}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Bairro"
+        onChangeText={setBairro}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Data de Nascimento"
+        onChangeText={setDataNasc}
+      />
+      <TextInput
+        style={styles.input}
         placeholder="E-mail"
+        onChangeText={setEmail}
       />
-
       <TextInput
         style={styles.input}
-        value={senha}
-        onChangeText={(event) => setSenha(event)}
         placeholder="Senha"
-        keyboardType="numeric"
         secureTextEntry={true}
+        onChangeText={setSenha}
       />
 
-      <TouchableOpacity style={styles.button}>
-        <Text onPress={Cadastrar}>Cadastrar</Text>
+      <TouchableOpacity style={styles.button} onPress={Cadastrar}>
+        <Text>Cadastrar</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+
   title: {
     textAlign: 'center',
     fontSize: 30,
@@ -80,7 +104,6 @@ const styles = StyleSheet.create({
     padding: 12,
     width: 312,
   },
-
   button: {
     alignItems: 'center',
     alignSelf: 'center',

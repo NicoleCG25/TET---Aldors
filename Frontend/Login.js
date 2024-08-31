@@ -40,6 +40,8 @@ const Login = ({ navigation }) => {
   return (
     <SafeAreaView>
 
+      <Text style={styles.title}>Login</Text>
+
       <TextInput
         style={styles.input}
         onChangeText={(event) => setEmail(event)}
