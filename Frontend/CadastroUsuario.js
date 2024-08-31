@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import { SafeAreaView, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const CadastroUsuario = ({ navigation }) => {
-  const [text, onChangeText] = React.useState('');
-  const [number, onChangeNumber] = React.useState('');
-  const [nome, setNome] = React.useState(''); //Do tipo useState, usada para modificar variaveis. Pegar o que foi digitado pelo usuario
-  const [email, setEmail] = React.useState('');
-  const [senha, setSenha] = React.useState('');
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [dataNasc, setDataNasc] = useState('');
   const [mensagem, setMensagem] = useState('');
 
   const Cadastrar = () => {
     console.log('teste');
-    var userObj = { nome: nome, email: email, senha: senha }; //1° atributo, 2° valor
+    var userObj = { nome, email, senha, estado, cidade, bairro, dataNasc };
     var jsonBody = JSON.stringify(userObj);
-    console.log(jsonBody); //Para ver se está construido corretamente
+    console.log(jsonBody);
     fetch('https://tet-nicole.glitch.me/usuarios', {
       method: 'POST',
       headers: {
@@ -33,7 +35,7 @@ const CadastroUsuario = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
 
       <Text style={styles.title}>Fazer Cadastro</Text>
 
@@ -41,38 +43,45 @@ const CadastroUsuario = ({ navigation }) => {
         style={styles.input}
         placeholder="Nome"
         onChangeText={setNome}
+        value={nome}
       />
       <TextInput
         style={styles.input}
         placeholder="Estado"
         onChangeText={setEstado}
+        value={estado}
       />
       <TextInput
         style={styles.input}
         placeholder="Cidade"
         onChangeText={setCidade}
+        value={cidade}
       />
       <TextInput
         style={styles.input}
         placeholder="Bairro"
         onChangeText={setBairro}
+        value={bairro}
       />
       <TextInput
         style={styles.input}
         placeholder="Data de Nascimento"
         onChangeText={setDataNasc}
+        value={dataNasc}
       />
 
       <TextInput
         style={styles.input}
         placeholder="E-mail"
         onChangeText={setEmail}
+        value={email}
       />
       <TextInput
         style={styles.input}
         placeholder="Senha"
         secureTextEntry={true}
         onChangeText={setSenha}
+        value={senha}
       />
 
       <TouchableOpacity style={styles.button} onPress={Cadastrar}>
@@ -83,12 +92,16 @@ const CadastroUsuario = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
   title: {
     textAlign: 'center',
     fontSize: 30,
+    marginBottom: 20,
   },
-
   input: {
     alignSelf: 'center',
     height: 40,
