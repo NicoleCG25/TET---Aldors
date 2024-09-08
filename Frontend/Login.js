@@ -73,7 +73,7 @@ const Login = ({ navigation }) => {
         onPress={() => {
           navigation.navigate('CadastroUsuario');
         }}>
-        <Text>Fazer Cadastro</Text>
+        <Text>Fazer Cadastro como Usuário</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
