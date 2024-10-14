@@ -84,7 +84,7 @@ app.put("/usuarios/:id", (req, res) => {
 // Rota para excluir um usuário
 app.delete("/usuarios/:id", (req, res) => {
   const id = [req.params.id];
-  execSQLQuery("DELETE FROM Usuário WHERE Id=?", id, res);
+  execSQLQuery("DELETE FROM usuario WHERE Id=?", id, res);
 });
 
 // Iniciar o servidor
