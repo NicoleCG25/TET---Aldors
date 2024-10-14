@@ -14,22 +14,25 @@ export function EditarUsuario({ route, navigation }) {
     const [senha, setSenha] = useState(Senha);
 
     const handleUpdate = () => {
-        // Verificar se todos os campos estão preenchidos
-        if (!nome || !estado || !cidade || !bairro || !dataNasc || !email || !senha) {
-            Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+        // Cria um objeto vazio para armazenar apenas os campos alterados
+        const usuarioAtualizado = {};
+
+        // Adiciona campos alterados ao objeto, mantendo os que não mudaram
+        if (nome !== Nome) usuarioAtualizado.nome = nome;
+        if (estado !== Estado) usuarioAtualizado.estado = estado;
+        if (cidade !== Cidade) usuarioAtualizado.cidade = cidade;
+        if (bairro !== Bairro) usuarioAtualizado.bairro = bairro;
+        if (dataNasc !== DataNasc) usuarioAtualizado.dataNasc = dataNasc;
+        if (email !== Email) usuarioAtualizado.email = email;
+        if (senha !== Senha) usuarioAtualizado.senha = senha;
+
+        // Verifica se pelo menos um campo foi alterado
+        if (Object.keys(usuarioAtualizado).length === 0) {
+            Alert.alert('Erro', 'Nenhum campo foi alterado.');
             return;
         }
 
-        const usuarioAtualizado = {
-            nome,
-            estado,
-            cidade,
-            bairro,
-            dataNasc,
-            email,
-            senha,
-        };
-
+        // Fazer a requisição de atualização
         fetch(`https://tet-nicole.glitch.me/usuarios/${Id}`, {
             method: 'PUT',
             headers: {
