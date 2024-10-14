@@ -1,50 +1,67 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, TextInput, Button, } from 'react-native';
 
 export function TelaLista({ navigation }) {
+  // Estado para armazenar a lista de usuários
   const [data, setData] = useState([]);
 
+  // useEffect para buscar a lista de usuários quando o componente é montado
   useEffect(() => {
-    fetchList();
-  }, []);
-
-  const fetchList = async () => {
-    try {
-      const response = await fetch('https://tet-nicole.glitch.me/usuarios', {
+    async function fetchList() {
+      fetch('https://tet-nicole.glitch.me/usuarios', {
         headers: {
           'Content-Type': 'application/json',
         },
-      });
-      const resJson = await response.json();
-      setData(resJson);
-    } catch (e) {
-      console.log(e);
+      })
+        .then((res) => res.json())
+        .then((resJson) => {
+          setData(resJson); // Atualiza o estado com a lista de usuários
+        })
+        .catch((e) => console.log(e)); // Log de erros caso a busca falhe
     }
+    fetchList();
+  }, []);
+
+  // Função para excluir um usuário
+  // Função para excluir um usuário diretamente
+  const Excluir = (usu_id) => {
+    console.log('ID a ser excluído:', usu_id); // Para depuração
+
+    var requestOptions = {
+      method: 'DELETE',
+      redirect: 'follow',
+    };
+
+    // Fazer a requisição DELETE
+    fetch('https://tet-nicole.glitch.me/usuarios/' + usu_id, requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Erro ao excluir o usuário.'); // Lançar erro se a resposta não for OK
+        }
+        return response.text(); // Receber o resultado como texto
+      })
+      .then((result) => {
+        console.log('Resultado da exclusão:', result); // Logar o resultado da exclusão
+
+        // Atualizar a lista após excluir
+        setData(data.filter((user) => user.Id !== usu_id));
+      })
+      .catch((error) => {
+        console.log('Erro na exclusão:', error); // Logar erro
+      });
   };
 
-  const Excluir = (usu_id) => {
-    return Alert.alert('Confirmar', 'Deseja Excluir?', [
-      {
-        text: 'Sim',
-        onPress: () => {
-          fetch('https://tet-nicole.glitch.me/usuarios/' + usu_id, {
-            method: 'DELETE',
-            redirect: 'follow',
-          })
-            .then(() => {
-              setData(data.filter(item => item.Id !== usu_id));
-            })
-            .catch((error) => console.log('error', error));
-        },
-      },
-      { text: 'Não' },
-    ]);
-  };
 
   const Editar = (usuario) => {
     navigation.navigate('EditarUsuario', usuario);
-  };  
+  };
 
+  // Função para formatar a data removendo o "T00:00:00.000Z"
+  const formatarData = (dataString) => {
+    return new Date(dataString).toLocaleDateString('pt-BR');
+  };
+
+  // Para renderizar cada item da lista
   const renderItemComponent = ({ item }) => (
     <View style={styles.listItem}>
       <View style={styles.listItemView}>
@@ -53,7 +70,7 @@ export function TelaLista({ navigation }) {
         <Text>Estado: {item.Estado}</Text>
         <Text>Cidade: {item.Cidade}</Text>
         <Text>Bairro: {item.Bairro}</Text>
-        <Text>Data de Nascimento: {item.DataNasc}</Text>
+        <Text>Data de Nascimento: {formatarData(item.DataNasc)}</Text>
         <Text>Email: {item.Email}</Text>
       </View>
       <TouchableOpacity style={styles.listItemButton} onPress={() => Editar(item)}>
@@ -65,6 +82,8 @@ export function TelaLista({ navigation }) {
     </View>
   );
 
+
+  //Para separar itens na lista
   const ItemSeparator = () => <View style={styles.listItemSeparator} />;
 
   return (

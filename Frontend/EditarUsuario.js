@@ -45,7 +45,7 @@ export function EditarUsuario({ route, navigation }) {
             })
             .then(() => {
                 Alert.alert('Sucesso', 'Usuário atualizado com sucesso!', [
-                    { text: 'OK', onPress: () => navigation.goBack() },  // Altere para goBack
+                    { text: 'OK', onPress: () => navigation.goBack() },
                 ]);
             })
             .catch((error) => {
